@@ -32,7 +32,7 @@ then
 
       # do the setup process and initiate an environment variable so we can call this script by an alias for fast access
       # it is assumed that where we're running devdom is where it will live
-      cat ~/.devdom/function-builder >> ~/.bashrc
+      echo "source ~/.devdom/function-builder" >> ~/.bashrc
       echo -e "Configuration completed, now run: . ~/.bashrc\nThis will refresh your current shell, without logging out; so we can use devdom commands.\n \
       \tRun: . ~/.bashrc\n \
       \tThen, run: devdom domain createthisdomain.test (replace createthisdomain.test for whatever the URL is you wish to use)"
@@ -46,15 +46,12 @@ then
   else
 
     # bashrc doesn't exist, so the likely destination is bash_profile.
-    cat ~/.devdom/function-builder >> ~/.bash_profile
+    echo "source ~/.devdom/function-builder" >> ~/.bash_profile
     echo -e "Configuration completed, now run: . ~/.bash_profile\nThis will refresh your current shell, without logging out; so we can use devdom commands.\n \
     \tRun: . ~/.bash_profile\n \
     \tThen, run: devdom domain createthisdomain.test (replace createthisdomain.test for whatever the URL is you wish to use)"
 
   fi
-
-  # remove this script; we no longer need it
-  rm devdom.sh
 
 else
 
