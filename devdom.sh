@@ -21,7 +21,7 @@ then
       if [[ -d .devdom ]];
       then
 
-        cp -r .devdom/ ~/.devdom/
+        cp -r .devdom ~/.devdom
 
       else
 
