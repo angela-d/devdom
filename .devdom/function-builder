@@ -71,21 +71,23 @@ function devdom() {
     then
 
       echo "Removing Devdom config.."
-      rm -rf ~/.devdom
 
       # remove bash function
-      if [[ $(grep "devdom virtualhost generator" ~/.bashrc | wc -l) > '0' ]];
+      if [[ $(grep "function-builder" ~/.bashrc | wc -l) > '0' ]];
       then
 
-        sed 's@### devdom virtualhost generator: https://github.com/angela-d/devdom ###.*### end devdom ###@@' ~/.bashrc
+        sed -i '\|devdom|d' ~/.bashrc
         echo -e "Done.  To complete removal, run:\n\t. ~/.bashrc"
 
       else
 
-        sed 's@### devdom virtualhost generator: https://github.com/angela-d/devdom ###.*### end devdom ###@@' ~/.bash_profile
+        sed -i '\|devdom|d' ~/.bash_profile
         echo -e "Done.  To complete removal, run:\n\t. ~/.bash_profile"
 
       fi
+
+      rm -rf ~/.devdom
+      unset -f devdom
 
     elif [[ $CONFIRM != 'y' ]];
     then
