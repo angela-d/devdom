@@ -1,7 +1,9 @@
 # Devdom Virtualhost Generator for Linux Desktop
 ###### *dev*elopment  *dom*ains
 
-Devdom is a command-line tool that was inspired by the simplicity of Valet on Mac, so I wanted to bring the same functionality to my local development environment on Linux, without actually having to bring in any additional components like dnsmasq -- so it is in no way a replacement for the [Valet Linux Project](https://github.com/cpriego/valet-linux).
+Devdom is a command-line tool that was inspired by the simplicity of Valet on Mac.
+
+I wanted to bring the same functionality to my local development environment on Linux, without actually having to bring in any additional components like dnsmasq -- so it is in no way a replacement for the [Valet Linux Project](https://github.com/cpriego/valet-linux).
 
 
 ### Devdom is a beta release.
@@ -50,6 +52,19 @@ devdom uninstall
 ```
 
 That's it!  Seconds worth of commands vs several minutes worth of running cp & sed commands!
+
+
+## Get the script
+* Navigate to a non-public directory in your system (I usually have a `~/Github` folder, specifically for 3rd-party tools)
+```bash
+git clone https://github.com/angela-d/devdom.git && cd devdom
+```
+Run setup
+```bash
+./devdom.sh setup
+```
+
+That's all there is to it.  Devdom will provide prompts on what it's doing & will let you know when it needs your intervention.
 
 
 #### Want to help, or found a bug?
