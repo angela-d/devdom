@@ -1,0 +1,102 @@
+
+### devdom virtualhost generator: https://github.com/angela-d/devdom ###
+function devdom() {
+
+  # creating a virtualhost
+  if [ $1 == 'domain' ];
+  then
+
+    DOMAIN="$2"                 # prepare the domain for splitting
+    VIRT_CONF=${DOMAIN//[-._]/} # not a fan of special chars in config filepaths
+
+    # make sure it doesn't already exist
+    if [[ $(grep $DOMAIN -R /etc/apache2/sites-available/ | wc -l) == '0' ]];
+    then
+
+      # it does not exist; proceed
+      cp ~/.devdom/template /etc/apache2/sites-available/"$VIRT_CONF".conf
+
+      # replace the template variables with what the user supplied
+      sed -i -- "s/VHOST_DOMAIN/$DOMAIN/g" /etc/apache2/sites-available/"$VIRT_CONF".conf
+
+      echo "Where will the files for "$DOMAIN" be stored?  i.e. /home/my_username/some_directory/"
+        read DOMAIN_DEST
+
+      # @ is used as a delimiter here because we're accepting slashes with input
+      sed -i -- "s@VHOST_LOCATION@$DOMAIN_DEST@g" /etc/apache2/sites-available/"$VIRT_CONF".conf
+
+        a2ensite "$VIRT_CONF"
+
+      # create a hosts file entry, so our domain resolves locally
+      echo "0.0.0.0 $DOMAIN" >> /etc/hosts
+
+      # also append to a custom hosts modifier, for those of us that utilizing things like steven black's hosts file (as EVERYONE should)
+      # https://github.com/StevenBlack/hosts
+
+      if [[ -f ~/.devdom/hosts-modifier ]];
+      then
+
+        echo "0.0.0.0 $DOMAIN" >> ~/.devdom/hosts-modifier
+        # after you obtain an update from steven's hosts file, simply run: devdom hosts -- to re-sync your dev domains
+
+      else
+
+        touch ~/.devdom/hosts-modifier
+
+      fi
+
+    else
+
+      echo -e "$DOMAIN is already an existing VirtualHost.  Run the following, to activate:\n\ta2ensite $VIRT_CONF"
+
+    fi
+
+  elif [[ $1 == 'hosts' ]];
+  then
+
+    # hosts update requested
+    cat ~/.devdom/hosts-modifier >> /etc/hosts
+    echo "hosts file successfully updated with development domains!"
+
+  elif [[ $1 == 'uninstall' ]];
+  then
+
+    # removal command received
+    echo -e "The uninstall process will only remove the brains of Devdom, any domains it created will be left untouched.\n \
+    Do you wish to proceed with removal?  Type y to confirm."
+
+    read CONFIRM
+
+    if [[ $CONFIRM == 'y' ]];
+    then
+
+      echo "Removing Devdom config.."
+      rm -rf ~/.devdom
+
+      # remove bash function
+      if [[ $(grep "devdom virtualhost generator" ~/.bashrc | wc -l) > '0' ]];
+      then
+
+        sed 's@### devdom virtualhost generator: https://github.com/angela-d/devdom ###.*### end devdom ###@@' ~/.bashrc
+        echo -e "Done.  To complete removal, run:\n\t. ~/.bashrc"
+
+      else
+
+        sed 's@### devdom virtualhost generator: https://github.com/angela-d/devdom ###.*### end devdom ###@@' ~/.bash_profile
+        echo -e "Done.  To complete removal, run:\n\t. ~/.bash_profile"
+
+      fi
+
+    elif [[ $CONFIRM != 'y' ]];
+    then
+
+    	echo "Cannot proceed with removal without your confirmation."
+
+    fi
+
+  else
+    echo "Argument $1 unrecognized."
+  fi
+
+}
+### end devdom ###
