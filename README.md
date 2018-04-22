@@ -53,6 +53,6 @@ That's it!  Seconds worth of commands vs several minutes worth of running cp & s
 
 
 #### Want to help, or found a bug?
-[Report a bug](../issues) on the issues tracker
+[Report a bug](../../issues) on the issues tracker
 
-[Project pipelne](../projects) for features planned
+[Project pipelne](../../projects) for features planned
