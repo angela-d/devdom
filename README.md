@@ -1,6 +1,8 @@
 # Devdom Virtualhost Generator for Linux Desktop
 ###### *dev*elopment  *dom*ains
 
+Automate Apache virtual host creation on Linux, with Devdom.
+
 Devdom is a command-line tool that was inspired by the simplicity of Valet on Mac.
 
 I wanted to bring the same functionality to my local development environment on Linux, without actually having to bring in any additional components like dnsmasq -- so it is in no way a replacement for the [Valet Linux Project](https://github.com/cpriego/valet-linux).
@@ -16,7 +18,7 @@ Eventually I'd like to add more flexibility to the overall script, so those in p
 
 Devdom assumes a few things about your environment:
 * You already have an active LAMP stack
-* Devdom can only be ran with **root** or sudo/su access
+* Devdom can only be ran with **root** or sudo/su access (low-level users cannot write to Apache config)
 * An SSL cert is already in place (self-signed works!)
 * You're in a Debian/Ubuntu (or deriatives) environment
 
@@ -35,7 +37,8 @@ Create a domain:
 devdom domain mysite.test
 ```
 * Devdom goes through the system and generates .conf files in `/etc/apache2/sites-available`
-* Enables the virtualhost with `a2ensite mysite` for you
+* Enables the virtualhost with `a2ensite mysite`
+* Registers appropriate aliases
 * Adds entries in `/etc/hosts` so the domain is accessible as a TLD
 * Also creates a hosts modifier, so if you regularly update your [Ad-blocking capabilities](https://github.com/StevenBlack/hosts), your dev environment won't be affected.
 
@@ -46,23 +49,35 @@ devdom hosts
 ```
 
 
-Uninstall:
-```bash
-devdom uninstall
-```
-
 That's it!  Seconds worth of commands vs several minutes worth of running cp & sed commands!
 
+#### Compatibility
+***
+Debian or Ubuntu-based LAMP distros; RHEL-based distros are [planned](../../projects) for future versions.
 
-## Get the script
-* Navigate to a non-public directory in your system (I usually have a `~/Github` folder, specifically for 3rd-party tools)
+## Get Devdom
+* Obtain the [.deb](https://github.com/angela-d/devdom/raw/master/devdom.deb) file from this repository.
+* As root or sudo, run the following:
+
 ```bash
-git clone https://github.com/angela-d/devdom.git && cd devdom
+cd /tmp && wget https://github.com/angela-d/devdom/raw/master/devdom.deb
 ```
-Run setup
+* Install it:
+
 ```bash
-./devdom.sh setup
+apt update && apt install ./devdom.deb
 ```
+
+(OPTIONAL)  If you prefer to use mysql over mariadb:
+```bash
+apt update && apt install ./devdom.deb --no-install-recommends
+```
+
+## Uninstall
+```bash
+apt remove devdom --purge
+```
+
 
 That's all there is to it.  Devdom will provide prompts on what it's doing & will let you know when it needs your intervention.
 
