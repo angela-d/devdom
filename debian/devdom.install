@@ -1,0 +1,3 @@
+debian/source/devdom	/usr/bin
+debian/source/template.conf	/usr/share/devdom
+debian/source/devdom.cnf	/etc/devdom

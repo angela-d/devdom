@@ -1,0 +1,103 @@
+#!/bin/bash
+
+CONFIG=/etc/devdom/devdom.cnf
+source $CONFIG
+
+# creating a virtualhost
+if [[ $1 == 'domain' ]];
+then
+
+  DOMAIN="$2"                 # prepare the domain for splitting
+  VIRT_CONF=${DOMAIN//[-._]/} # not a fan of special chars in config filepaths
+
+  # make sure it doesn't already exist
+  if [[ $(grep "$DOMAIN" -R /etc/apache2/sites-available/ | wc -l) == '0' ]];
+  then
+
+    # it does not exist; proceed
+    cp /usr/share/devdom/template.conf /etc/apache2/sites-available/"$VIRT_CONF".conf
+
+    # replace the template variables with what the user supplied
+    sed -i -- "s/VHOST_DOMAIN/$DOMAIN/g" /etc/apache2/sites-available/"$VIRT_CONF".conf
+
+    echo "Where will the files for $DOMAIN be stored?  i.e. /home/my_username/some_directory/"
+      read -r DOMAIN_DEST
+
+    # @ is used as a delimiter here because we're accepting slashes with input
+    sed -i -- "s@VHOST_LOCATION@$DOMAIN_DEST@g" /etc/apache2/sites-available/"$VIRT_CONF".conf
+
+      a2ensite "$VIRT_CONF"
+
+      if [[ $WORKENV == 'development' ]];
+      then
+
+        # create a hosts file entry, so our domain resolves locally
+        echo "0.0.0.0 $DOMAIN" >> /etc/hosts
+
+        # also append to a custom hosts modifier, for those of us that utilizing things like steven black's hosts file (as EVERYONE should)
+        # https://github.com/StevenBlack/hosts
+
+        if [[ -f /usr/share/devdom/hosts-modifier ]];
+        then
+
+          echo "0.0.0.0 $DOMAIN" >> /usr/share/devdom/hosts-modifier
+          # after you obtain an update from steven's hosts file, simply run: devdom hosts -- to re-sync your dev domains
+
+        else
+
+          touch /usr/share/devdom/hosts-modifier
+          echo "0.0.0.0 $DOMAIN" >> /usr/share/devdom/hosts-modifier
+
+        fi
+      fi
+
+  else
+
+    echo -e "$DOMAIN is already an existing VirtualHost.  Run the following, to activate:\n\ta2ensite $VIRT_CONF"
+
+  fi
+
+elif [[ $1 == 'hosts' ]];
+then
+
+  # hosts update requested
+  cat /usr/share/devdom/hosts-modifier >> /etc/hosts
+  echo "hosts file successfully updated with development domains!"
+
+elif [[ $1 == 'config' ]];
+then
+
+  if [[ $WORKENV == '1' ]];
+  then
+
+    ENVCHANGE='production'
+
+  else
+
+    ENVCHANGE='development'
+
+  fi
+
+  echo -e "Environment is currently $ENVCHANGE.\nPlease select one of the options below, to change:\n\n \
+  \t1 = Production (hosts modifications will be skipped)\n \
+  \t0 = Development (localhost; IPs will automatically route to 0.0.0.0)"
+
+  read -r UPDATECONFIG
+
+    if [[ -n ${UPDATECONFIG//[0-1]/} ]];
+    then
+
+      echo "Unrecognized option -- please select 1 or 0 to update Devdom's config."
+      devdom config
+
+    fi
+
+    echo "WORKENV=$UPDATECONFIG" > "$CONFIG"
+
+  echo "Workspace environment successfully updated."
+
+else
+
+  echo -e "Argument $1 unrecognized.  See:\n\tman devdom\n\nfor a list of known arguments."
+
+fi
