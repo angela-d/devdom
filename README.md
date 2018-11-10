@@ -14,7 +14,7 @@ The "beta" state is what I originally sought to solve while writing it:
 * Utilize a concise CLI command to generate local domains
 * Automate the process as much as possible
 
-Eventually I'd like to add more flexibility to the overall script, so those in production environments without access to automated management tools could utilize it.  In it's current state, I totally do not recommend using it on boxes that serve content to the outside world.  (It has not been tested for production environments.)
+Eventually (time permitting.. which is limited as of late) I'd like to add more flexibility to the overall script, so those in production environments without access to automated management tools could utilize it.  In it's current state, I totally do not recommend using it on boxes that serve content to the outside world.  (It has not been tested for production environments.)
 
 Devdom assumes a few things about your environment:
 * You already have an active LAMP stack
@@ -53,7 +53,7 @@ That's it!  Seconds worth of commands vs several minutes worth of running cp & s
 
 #### Compatibility
 ***
-Debian or Ubuntu-based LAMP distros; RHEL-based distros are [planned](../../projects) for future versions.
+Debian or Ubuntu-based LAMP distros; RHEL-based distros are not compatible.
 
 ## Get Devdom
 * Obtain the [.deb](https://github.com/angela-d/devdom/raw/master/devdom.deb) file from this repository.
@@ -82,7 +82,5 @@ apt remove devdom --purge
 That's all there is to it.  Devdom will provide prompts on what it's doing & will let you know when it needs your intervention.
 
 
-#### Want to help, or found a bug?
+#### Found a bug?
 [Report a bug](../../issues) on the issues tracker
-
-[Project pipelne](../../projects) for features planned
