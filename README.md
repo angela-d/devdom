@@ -57,8 +57,8 @@ Debian or Ubuntu-based LAMP distros; RHEL-based distros are not compatible.
 
 ## Get Devdom
 * Obtain the [.deb](https://github.com/angela-d/devdom/raw/master/devdom.deb) file from this repository.
-* As root or sudo, run the following:
 
+Git install: 
 ```bash
 git clone https://github.com/angela-d/devdom.git \
 cd devdom && sudo apt install ./devdom.deb
