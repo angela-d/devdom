@@ -1,0 +1,49 @@
+.de EX
+.ne 5
+.if n .sp 1
+.if t .sp .5
+.nf
+.in +.5i
+..
+.de EE
+.fi
+.in -.5i
+.if n .sp 1
+.if t .sp .5
+..
+.TH DEVDOM 8 "April 22, 2019"
+.SH NAME
+devdom \- A command-line tool to automate virtualhost creation.
+.SH SYNOPSIS
+.B devdom
+.RI [COMMAND]
+.RI [ARGUMENT]
+.PP
+(Expression is only required when generating a new domain.)
+.SH DESCRIPTION
+For those without access to system automation tools, instead of manually creating Apache virtualhost configuration by hand; one can utilize Devdom to simplify the setup workflow.
+.PP
+This program also has commands for special usage.
+.SS "Command reference:"
+.TP
+\fBdomain [argument]\fR
+Specifies the top-level domain you wish to create.  IE: localhost.local
+.TP
+\fBhosts\fR
+Syncs the hosts file to append changes from Devdom for local development, so *.test domains are routable locally.  (Not needed in production environments)
+.TP
+\fBconfig\fR
+Prompts an interactive shell to allow you to switch workspace environments. \fBProduction\fR skips the hosts modifications (as they are unneeded). \fB\fBDevelopment\fR routes all created domains to a routable localhost IP.
+.TP fR
+.SH SEE ALSO
+None
+.SH BUGS
+See/report bugs at https://github.com/angela-d/devdom/issues
+.SH AUTHOR
+The text for this page was written by Angela <angelad@disroot.org> for the Debian GNU/Linux system (but may be used by
+others).
+.SH COPYRIGHT
+Copyright  (C) 2019 Angela D.  License GPLv3+: GNU
+GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free  to  change  and  redistribute  it.
+There is NO WARRANTY, to the extent permitted by law.

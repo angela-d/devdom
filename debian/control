@@ -1,0 +1,16 @@
+Source: devdom
+Section: devel
+Priority: optional
+Maintainer: Angela <angelad@disroot.org>
+Build-Depends: debhelper, apache2 (>= 2.4)
+Standards-Version: 3.9.8
+Vcs-Git: https://github.com/angela-d/devdom.git
+Vcs-browser: https://github.com/angela-d/devdom.git
+
+Package: devdom
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: mariadb-client, mariadb-server, php, php-mysql
+Homepage: https://github.com/angela-d/devdom
+Description: devdom
+ Automate your virtualhost domain management.
